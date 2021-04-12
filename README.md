@@ -11,8 +11,8 @@ non-names. The total number of instances in the English dataset is shown below:
 English Dataset:
 
 	Total number of instances: 568825
-	Total number of names: 234507
-	Total number of non-names: 334318
+	Total number of names (Class 1): 234507
+	Total number of non-names (Class 0): 334318
 	
 Implementation Approach:
 In this project we have performed Names Detection by Training our own character level embeddings where we have allowed an indicator vector to be transformed to a
