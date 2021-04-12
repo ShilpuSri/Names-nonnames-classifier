@@ -9,31 +9,52 @@ filtered out the words so that they have a minimum length of 4 characters for bo
 non-names. The total number of instances in the English dataset is shown below:
 
 English Dataset:
-Total number of instances: 568825
-Total number of names: 234507
-Total number of non-names: 334318
 
-In this project we have performed Names Detection by Training our own character level embeddings where we have allowed an indicator vector to be transformed to a
-character level embedding using the (Keras) Embedding layer and then finally pass it to the LSTM layer. In this approach, each lowercase alphabet is mapped to its corresponding number from (1,27) For example: { ‘a’ : 1, ‘b’ : 2, ‘c’ : 3, ... , ‘z’ : 27 } , the vocab gets encoded into vectors. All the words (names and non-names) are padded to maintain a maxlen of 31. Note that we choose 31 because that is the length of the largest word in our dataset. We pass an array of (N*31) as X and the labels as y, where N is the number of training instances. We used the 80:20 ratio to split ourdata into training and testing. In this approach the embeddings and the weights of the networkare trained together.
+	Total number of instances: 568825
+	Total number of names: 234507
+	Total number of non-names: 334318
+	
+Implementation Approach:
+
+	In this project we have performed Names Detection by Training our own character level embeddings where we have allowed an indicator vector to be transformed to a
+	character level embedding using the (Keras) Embedding layer and then finally pass it to the LSTM layer. In this approach, each lowercase alphabet is mapped to its corresponding number from (1,27) For example: { ‘a’ : 1, ‘b’ : 2, ‘c’ : 3, ... , ‘z’ : 27 } , the vocab gets encoded into vectors. All the words (names and non-names) are padded to maintain a maxlen of 31. Note that we choose 31 because that is the length of the largest word in our dataset. We pass an array of (N*31) as X and the labels as y, where N is the number of training instances. We used the 80:20 ratio to split ourdata into training and testing. In this approach the embeddings and the weights of the networkare trained together.
 
 Model:
-![image](https://user-images.githubusercontent.com/57567199/114469232-9c583b00-9ba1-11eb-8095-7c37633d53ac.png)
+
+	def build_model(max_features, maxlen):
+    """Build Bi-LSTM model"""
+    model = tf.keras.models.Sequential()
+    model.add(tf.keras.layers.Embedding(max_features, 300, weights=[embedding_matrix], input_length=maxlen, trainable=True))
+    model.add(tf.keras.layers.Bidirectional(tf.compat.v1.keras.layers.CuDNNLSTM(300)))
+    model.add(tf.keras.layers.Dense(300))
+    model.add(tf.keras.layers.Dropout(0.5))
+    model.add(tf.keras.layers.Dense(1))
+    model.add(tf.keras.layers.Activation('sigmoid'))
+    model.compile(loss='binary_crossentropy', optimizer='adam')
+    return model_
 
 Results:
 Accuracy:
-Class 0: 0.9073260677290239
-Class 1: 0.9215861277572358
-Overall: 0.913224629719158
+
+	Class 0: 0.9073260677290239
+	Class 1: 0.9215861277572358
+	Overall: 0.913224629719158
 
 Classification Report:
-              precision    recall  f1-score   support
 
-           0       0.94      0.91      0.92     66707
-           1       0.88      0.92      0.90     47058
+               precision    recall  f1-score   support
 
-    accuracy                           0.91    113765
-   macro avg       0.91      0.91      0.91    113765
-weighted avg       0.91      0.91      0.91    113765
+            0       0.94      0.91      0.92     66707
+            1       0.88      0.92      0.90     47058
+
+  	  accuracy                           0.91    113765
+   
+	 	 macro avg       0.91      0.91      0.91    113765
+
+	weighted avg       0.91      0.91      0.91    113765
+
+
+
 
 
 
