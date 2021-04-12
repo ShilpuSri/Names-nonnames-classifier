@@ -15,23 +15,22 @@ English Dataset:
 	Total number of non-names: 334318
 	
 Implementation Approach:
-
-	In this project we have performed Names Detection by Training our own character level embeddings where we have allowed an indicator vector to be transformed to a
-	character level embedding using the (Keras) Embedding layer and then finally pass it to the LSTM layer. In this approach, each lowercase alphabet is mapped to its corresponding number from (1,27) For example: { ‘a’ : 1, ‘b’ : 2, ‘c’ : 3, ... , ‘z’ : 27 } , the vocab gets encoded into vectors. All the words (names and non-names) are padded to maintain a maxlen of 31. Note that we choose 31 because that is the length of the largest word in our dataset. We pass an array of (N*31) as X and the labels as y, where N is the number of training instances. We used the 80:20 ratio to split ourdata into training and testing. In this approach the embeddings and the weights of the networkare trained together.
+In this project we have performed Names Detection by Training our own character level embeddings where we have allowed an indicator vector to be transformed to a
+character level embedding using the (Keras) Embedding layer and then finally pass it to the LSTM layer. In this approach, each lowercase alphabet is mapped to its corresponding number from (1,27) For example: { ‘a’ : 1, ‘b’ : 2, ‘c’ : 3, ... , ‘z’ : 27 } , the vocab gets encoded into vectors. All the words (names and non-names) are padded to maintain a maxlen of 31. Note that we choose 31 because that is the length of the largest word in our dataset. We pass an array of (N*31) as X and the labels as y, where N is the number of training instances. We used the 80:20 ratio to split ourdata into training and testing. In this approach the embeddings and the weights of the networkare trained together.
 
 Model:
 
 	def build_model(max_features, maxlen):
-    """Build Bi-LSTM model"""
-    model = tf.keras.models.Sequential()
-    model.add(tf.keras.layers.Embedding(max_features, 300, weights=[embedding_matrix], input_length=maxlen, trainable=True))
-    model.add(tf.keras.layers.Bidirectional(tf.compat.v1.keras.layers.CuDNNLSTM(300)))
-    model.add(tf.keras.layers.Dense(300))
-    model.add(tf.keras.layers.Dropout(0.5))
-    model.add(tf.keras.layers.Dense(1))
-    model.add(tf.keras.layers.Activation('sigmoid'))
-    model.compile(loss='binary_crossentropy', optimizer='adam')
-    return model_
+    		"""Build Bi-LSTM model"""
+    		model = tf.keras.models.Sequential()
+    		model.add(tf.keras.layers.Embedding(max_features, 300, weights=[embedding_matrix], input_length=maxlen, trainable=True))
+    		model.add(tf.keras.layers.Bidirectional(tf.compat.v1.keras.layers.CuDNNLSTM(300)))
+    		model.add(tf.keras.layers.Dense(300))
+    		model.add(tf.keras.layers.Dropout(0.5))
+    		model.add(tf.keras.layers.Dense(1))
+    		model.add(tf.keras.layers.Activation('sigmoid'))
+    		model.compile(loss='binary_crossentropy', optimizer='adam')
+    		return model
 
 Results:
 Accuracy:
@@ -49,9 +48,9 @@ Classification Report:
 
   	  accuracy                           0.91    113765
    
-	 	 macro avg       0.91      0.91      0.91    113765
+	 macro avg       0.91      0.91      0.91    113765
 
-	weighted avg       0.91      0.91      0.91    113765
+	weighted avg     0.91      0.91      0.91    113765
 
 
 
